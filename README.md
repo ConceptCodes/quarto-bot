@@ -10,7 +10,7 @@ Inspired by a post on X about the LeRobot Hackathon, where a team trained the [S
 The project involves several key components:
 - **Robot Control**: Training the SO-Arm101 to pick up and place pieces on the board.
 - **Computer Vision**: Enabling the bot to recognize pieces and their positions on the board
-- **ML Strategy**: Developing an Reinforcement Learning (RL) agent that can make strategic decisions based on the current game state.
+- **ML Strategy**: Developing a Reinforcement Learning (RL) agent that can make strategic decisions based on the current game state.
 
 ## Robot Control 
 
