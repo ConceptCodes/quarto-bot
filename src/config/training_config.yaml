@@ -1,0 +1,5 @@
+train: ../../data/train/images
+val: ../../data/valid/images
+
+nc: 16
+names: ['short-hollow-dark-circle', 'short-hollow-dark-square', 'short-hollow-light-circle', 'short-hollow-light-square', 'short-solid-dark-circle', 'short-solid-dark-square', 'short-solid-light-circle', 'short-solid-light-square', 'tall-hollow-dark-circle', 'tall-hollow-dark-square', 'tall-hollow-light-circle', 'tall-hollow-light-square', 'tall-solid-dark-circle', 'tall-solid-dark-square', 'tall-solid-light-circle', 'tall-solid-light-square']
