@@ -1,2 +1,7 @@
 ultralytics
 torch
+argparse
+opencv-python
+numpy
+matplotlib
+pathlib
