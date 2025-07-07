@@ -151,7 +151,7 @@ class QuartoPieceDetector:
 
     def detect_live_feed(self, camera_index=0, confidence=None):
         """
-        Run live detection with interactive display.
+        Run live detection with bounding boxes overlay.
 
         Args:
             camera_index: Camera device index
@@ -168,10 +168,47 @@ class QuartoPieceDetector:
             if camera.start_feed():
                 print("✓ Camera started for live detection")
                 time.sleep(2)
-                camera.live_detection_display(confidence=confidence)
+                print("Press 'q' to quit live detection.")
+                while True:
+                    frame = camera.get_frame()
+                    if frame is None:
+                        print("Failed to get frame from camera.")
+                        break
+                    # Run YOLO detection
+                    results = self.model.predict(
+                        source=frame,
+                        conf=confidence,
+                        show=False,
+                        save=False,
+                        verbose=False,
+                    )
+                    # Draw bounding boxes
+                    for result in results:
+                        boxes = result.boxes
+                        names = result.names
+                        if boxes is not None:
+                            for box in boxes:
+                                x1, y1, x2, y2 = map(int, box.xyxy[0])
+                                class_id = int(box.cls[0])
+                                conf_val = float(box.conf[0])
+                                label = f"{names[class_id]} {conf_val:.2f}"
+                                color = (0, 255, 0)
+                                cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                                cv2.putText(
+                                    frame,
+                                    label,
+                                    (x1, y1 - 10),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    0.6,
+                                    color,
+                                    2,
+                                )
+                    cv2.imshow(f"Live Detection (index {camera_index})", frame)
+                    if cv2.waitKey(1) & 0xFF == ord("q"):
+                        break
+                cv2.destroyAllWindows()
             else:
                 print("✗ Failed to start camera")
-
         finally:
             camera.stop_feed()
 

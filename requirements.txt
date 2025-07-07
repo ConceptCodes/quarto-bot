@@ -5,3 +5,5 @@ opencv-python
 numpy
 matplotlib
 pathlib
+pygame
+pyserial
