@@ -7,3 +7,9 @@ matplotlib
 pathlib
 pygame
 pyserial
+mujoco 
+glfw
+gym
+gymnasium[other]
+stable-baselines3[extra]
+shimmy>=2.0
