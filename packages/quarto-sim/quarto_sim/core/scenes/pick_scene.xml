@@ -24,7 +24,7 @@
         <!-- Quarto piece: cylinder, initial pos (0,0,0.05) -->
         <body name="quarto_piece" pos="0.3 0 0.05">
             <freejoint name="quarto_joint"/>
-            <geom name="piece_geom" type="cylinder" size="0.025 0.05" rgba="0.8 0.6 0.2 1" mass="0.05"/>
+            <geom name="piece_geom" type="cylinder" size="0.015 0.05" rgba="0.8 0.6 0.2 1" mass="0.05"/>
         </body>
 
         <!-- Overhead camera above the robot -->

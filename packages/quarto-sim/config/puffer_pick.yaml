@@ -1,0 +1,29 @@
+seed: 13
+num_envs: 1
+rollout_steps: 32
+minibatch_size: 32
+update_epochs: 1
+device: cpu
+checkpoint_dir: models/puffer_pick
+log_dir: data/puffer_pick
+
+env:
+  xml_path: src/sim/scenes/pick_scene.xml
+  control_dt: 0.0167  # ~60Hz control
+  action_scale: 0.04
+  max_episode_steps: 150
+  reward_success_bonus: 200.0
+  reward_distance_scale: -2.5
+  reward_energy_scale: -0.02
+  randomization:
+    piece_xy_bounds:
+      - [0.25, 0.37]  # x-range in meters
+      - [-0.08, 0.08]  # y-range in meters
+    piece_z_bounds: [0.04, 0.06]
+    placement_xy_bounds:
+      - [0.18, 0.42]
+      - [-0.12, 0.12]
+    placement_z: 0.035
+    board_grid_size: [4, 4]
+    board_square_spacing: 0.045
+    randomize_rotation: true

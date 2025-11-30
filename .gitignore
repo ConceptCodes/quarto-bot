@@ -91,6 +91,7 @@ runs/
 weights/
 *.weights
 yolo_training_logs/
+resources/
 
 # Annotation files (keep for training)
 # Uncomment if you want to ignore annotations

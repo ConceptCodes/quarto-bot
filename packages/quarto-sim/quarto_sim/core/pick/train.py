@@ -24,9 +24,9 @@ class SimplePolicy:
 
 def main():
     env = PickEnv()
-    policy = SimplePolicy(action_dim=6)  # 6 actuators
+    policy = SimplePolicy(action_dim=6)
 
-    n_episodes = 100
+    n_episodes = 1_000
     steps_per_episode = 200
 
     episode_rewards = []

@@ -2,7 +2,7 @@ import mujoco
 import mujoco.viewer
 import time
 
-model_path = "src/sim/scenes/scene.xml"
+model_path = "src/sim/scenes/pick_scene.xml"
 
 model = mujoco.MjModel.from_xml_path(model_path)
 data = mujoco.MjData(model)

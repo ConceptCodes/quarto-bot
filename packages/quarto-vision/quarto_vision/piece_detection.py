@@ -12,10 +12,8 @@ import json
 import time
 from pathlib import Path
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
-
 from ultralytics import YOLO
-from src.control.camera_feed import CameraFeed
+from quarto_driver.camera_feed import CameraFeed
 
 
 class QuartoPieceDetector:
@@ -94,6 +92,7 @@ class QuartoPieceDetector:
         try:
             # Load original image
             import cv2
+
             image = cv2.imread(image_path)
             if image is None:
                 print(f"Could not load image: {image_path}")
@@ -109,12 +108,12 @@ class QuartoPieceDetector:
                         class_id = int(box.cls[0])
                         conf_val = float(box.conf[0])
                         label = f"{names[class_id]} {conf_val:.2f}"
-                        
+
                         # Use different colors for different classes
                         colors = [
-                            (255, 0, 0),    # Blue
-                            (0, 255, 0),    # Green  
-                            (0, 0, 255),    # Red
+                            (255, 0, 0),  # Blue
+                            (0, 255, 0),  # Green
+                            (0, 0, 255),  # Red
                             (255, 255, 0),  # Cyan
                             (255, 0, 255),  # Magenta
                             (0, 255, 255),  # Yellow
@@ -123,36 +122,55 @@ class QuartoPieceDetector:
                         ]
                         box_color = colors[class_id % len(colors)]
                         text_color = (255, 255, 255)  # White text
-                        
+
                         # Draw bounding box
                         cv2.rectangle(image, (x1, y1), (x2, y2), box_color, 4)
-                        
+
                         # Get text size for background rectangle
                         font = cv2.FONT_HERSHEY_SIMPLEX
                         font_scale = 1.5  # Even larger font
                         thickness = 3
-                        (text_width, text_height), baseline = cv2.getTextSize(label, font, font_scale, thickness)
-                        
+                        (text_width, text_height), baseline = cv2.getTextSize(
+                            label, font, font_scale, thickness
+                        )
+
                         # Draw colored background rectangle for text (same color as box)
-                        cv2.rectangle(image, (x1, y1 - text_height - 15), 
-                                    (x1 + text_width + 10, y1), box_color, -1)
-                        
+                        cv2.rectangle(
+                            image,
+                            (x1, y1 - text_height - 15),
+                            (x1 + text_width + 10, y1),
+                            box_color,
+                            -1,
+                        )
+
                         # Draw text
-                        cv2.putText(image, label, (x1 + 5, y1 - 8), font, font_scale, text_color, thickness)
+                        cv2.putText(
+                            image,
+                            label,
+                            (x1 + 5, y1 - 8),
+                            font,
+                            font_scale,
+                            text_color,
+                            thickness,
+                        )
 
             # Create output filename with model name suffix
             input_path = Path(image_path)
-            model_name = Path(self.model_path).parent.parent.name  # Extract model name from path
-            output_filename = f"{input_path.stem}_{model_name}_detected{input_path.suffix}"
+            model_name = Path(
+                self.model_path
+            ).parent.parent.name  # Extract model name from path
+            output_filename = (
+                f"{input_path.stem}_{model_name}_detected{input_path.suffix}"
+            )
             output_path = Path("assets") / output_filename
-            
+
             # Ensure assets directory exists
             output_path.parent.mkdir(exist_ok=True)
-            
+
             # Save annotated image
             cv2.imwrite(str(output_path), image)
             print(f"✓ Annotated image saved to: {output_path}")
-            
+
         except Exception as e:
             print(f"Failed to save annotated image: {e}")
 
@@ -260,12 +278,12 @@ class QuartoPieceDetector:
                                 class_id = int(box.cls[0])
                                 conf_val = float(box.conf[0])
                                 label = f"{names[class_id]} {conf_val:.2f}"
-                                
+
                                 # Use different colors for different classes
                                 colors = [
-                                    (255, 0, 0),    # Blue
-                                    (0, 255, 0),    # Green  
-                                    (0, 0, 255),    # Red
+                                    (255, 0, 0),  # Blue
+                                    (0, 255, 0),  # Green
+                                    (0, 0, 255),  # Red
                                     (255, 255, 0),  # Cyan
                                     (255, 0, 255),  # Magenta
                                     (0, 255, 255),  # Yellow
@@ -274,22 +292,37 @@ class QuartoPieceDetector:
                                 ]
                                 box_color = colors[class_id % len(colors)]
                                 text_color = (255, 255, 255)  # White text
-                                
+
                                 # Draw bounding box
                                 cv2.rectangle(frame, (x1, y1), (x2, y2), box_color, 4)
-                                
+
                                 # Get text size for background rectangle
                                 font = cv2.FONT_HERSHEY_SIMPLEX
                                 font_scale = 1.5  # Even larger font
                                 thickness = 3
-                                (text_width, text_height), baseline = cv2.getTextSize(label, font, font_scale, thickness)
-                                
+                                (text_width, text_height), baseline = cv2.getTextSize(
+                                    label, font, font_scale, thickness
+                                )
+
                                 # Draw colored background rectangle for text (same color as box)
-                                cv2.rectangle(frame, (x1, y1 - text_height - 15), 
-                                            (x1 + text_width + 10, y1), box_color, -1)
-                                
+                                cv2.rectangle(
+                                    frame,
+                                    (x1, y1 - text_height - 15),
+                                    (x1 + text_width + 10, y1),
+                                    box_color,
+                                    -1,
+                                )
+
                                 # Draw text
-                                cv2.putText(frame, label, (x1 + 5, y1 - 8), font, font_scale, text_color, thickness)
+                                cv2.putText(
+                                    frame,
+                                    label,
+                                    (x1 + 5, y1 - 8),
+                                    font,
+                                    font_scale,
+                                    text_color,
+                                    thickness,
+                                )
                     cv2.imshow(f"Live Detection (index {camera_index})", frame)
                     if cv2.waitKey(1) & 0xFF == ord("q"):
                         break

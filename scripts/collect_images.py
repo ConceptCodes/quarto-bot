@@ -1,12 +1,11 @@
 import cv2
-import os
 import time
 from pathlib import Path
 
-SAVE_DIR = Path("data/collected_images") 
+SAVE_DIR = Path("data/collected_images")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
-CAMERA_INDEX = 0 
+CAMERA_INDEX = 0
 
 print("Starting camera for data collection...")
 cap = cv2.VideoCapture(CAMERA_INDEX)
