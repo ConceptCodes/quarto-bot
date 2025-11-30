@@ -240,7 +240,7 @@ class QuartoRulesEngine:
 
         # Place the piece on the board
         game_state.board[row][col] = game_state.selected_piece
-        game_state.available_pieces.remove(game_state.selected_piece.id)
+        # Piece was already removed from available_pieces when selected
         game_state.turn_count += 1
 
         # Clear the selected piece after placement

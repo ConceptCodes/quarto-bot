@@ -5,6 +5,8 @@ description = "Strategy agent for Quarto"
 requires-python = ">=3.10"
 dependencies = [
     "torch",
+    "numpy",
+    "gymnasium",
     "quarto-engine",
 ]
 

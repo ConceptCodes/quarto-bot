@@ -2323,12 +2323,16 @@ name = "quarto-brain"
 version = "0.1.0"
 source = { editable = "packages/quarto-brain" }
 dependencies = [
+    { name = "gymnasium" },
+    { name = "numpy" },
     { name = "quarto-engine" },
     { name = "torch" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "gymnasium" },
+    { name = "numpy" },
     { name = "quarto-engine", editable = "packages/quarto-engine" },
     { name = "torch" },
 ]
