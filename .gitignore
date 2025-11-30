@@ -25,7 +25,7 @@ MANIFEST
 
 # Virtual environments
 .env
-.venv
+.venv/
 env/
 venv/
 ENV/
@@ -79,12 +79,10 @@ Temporary Items
 *.pkl
 *.pickle
 
-# Large image datasets (keep small samples)
-data/train/raw/
-
-# Keep sample images for documentation
-!data/test/
-!data/examples/
+# Large image datasets
+data/
+# Exception: if you want to track specific data folders, uncomment below:
+# !data/examples/
 
 # YOLO training outputs
 runs/
@@ -93,19 +91,15 @@ weights/
 yolo_training_logs/
 resources/
 
-# Annotation files (keep for training)
-# Uncomment if you want to ignore annotations
-# *.txt
-# *.xml
-# *.json
-
-# Image formats to ignore
+# Image formats to ignore (unless they are assets)
 *.heic
 *.HEIC
 *.raw
 *.RAW
 *.tiff
 *.TIFF
+# Note: .png and .jpg are not ignored globally to allow assets/ to work,
+# but they are ignored in data/ because data/ is ignored.
 
 # Game logs and recordings
 logs/
@@ -143,6 +137,7 @@ config/api_keys.yaml
 *.backup
 *~
 
-
-data/
-videos/
+# Workspace Build Artifacts (for uv/hatch packages)
+packages/*/dist/
+packages/*/build/
+packages/*/*.egg-info/
