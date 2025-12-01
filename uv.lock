@@ -387,6 +387,15 @@ wheels = [
 ]
 
 [[package]]
+name = "dill"
+version = "0.3.7"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c4/31/54dd222e02311c2dbc9e680d37cbd50f4494ce1ee9b04c69980e4ec26f38/dill-0.3.7.tar.gz", hash = "sha256:cc1c8b182eb3013e24bd475ff2e9295af86c1a38eb1aff128dac8962a9ce3c03", size = 183355, upload-time = "2023-07-22T22:18:46.449Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f5/3a/74a29b11cf2cdfcd6ba89c0cecd70b37cd1ba7b77978ce611eb7a146a832/dill-0.3.7-py3-none-any.whl", hash = "sha256:76b122c08ef4ce2eedcd4d1abd8e641114bfc6c2867f49f3c41facf65bf19f5e", size = 115254, upload-time = "2023-07-22T22:18:44.511Z" },
+]
+
+[[package]]
 name = "etils"
 version = "1.13.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2323,6 +2332,7 @@ name = "quarto-brain"
 version = "0.1.0"
 source = { editable = "packages/quarto-brain" }
 dependencies = [
+    { name = "dill" },
     { name = "gymnasium" },
     { name = "numpy" },
     { name = "quarto-engine" },
@@ -2331,6 +2341,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "dill", specifier = "<0.3.8" },
     { name = "gymnasium" },
     { name = "numpy" },
     { name = "quarto-engine", editable = "packages/quarto-engine" },

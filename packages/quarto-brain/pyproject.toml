@@ -8,6 +8,7 @@ dependencies = [
     "numpy",
     "gymnasium",
     "quarto-engine",
+    "dill<0.3.8",
 ]
 
 [tool.uv.sources]

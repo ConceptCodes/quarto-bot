@@ -134,46 +134,22 @@ class QuartoMCTS:
         return 0.0
 
     def _backpropagate(self, node: MCTSNode, result: float):
-        # Result is +1 for P1 win, -1 for P2 win.
+        # result is +1.0 for Player 1 win, -1.0 for Player 2 win, 0.0 for Draw
         while node is not None:
             node.visits += 1
 
-            # If this node represents a state where P1 is about to act,
-            # its value should reflect P1's advantage.
-            # If P1 wins (result=1.0), value goes up.
-
-            # Wait, standard MCTS formulation for 2-player zero-sum:
-            # If node.state.current_player == P1:
-            #    We want to choose a child that maximizes P1's outcome.
-            #    So we accumulate result directly?
-            # It's subtle with the 2-step turn.
-
-            # Simplification:
-            # Always view from P1 perspective.
-            # If P1 wins, +1. If P2 wins, -1.
-            # If it's P1's turn, we pick max child.
-            # If it's P2's turn, we pick min child?
-            # OR we negate value when moving up tree?
-
-            # Standard UCT assumes we select Max child.
-            # So if it's P2's turn, we should flip the reward so P2 maximizes their own win (P1 loss).
-
-            # Node state has current_player.
-            # If node.state.current_player == Player.PLAYER1:
-            #   Add result (positive for P1 win)
-            # Else:
-            #   Subtract result (positive for P2 win)
-
-            # BUT: In Quarto, the state has a Phase.
-            # P1 (Place) -> P1 (Select) -> P2 (Place)
-            # P1(Place) wants to maximize P1 win.
-            # P1(Select) wants to maximize P1 win.
-            # P2(Place) wants to maximize P2 win (minimize P1 win).
-
-            if node.state.current_player == Player.PLAYER1:
-                node.value += result
+            if node.parent is not None:
+                # Determine if this outcome was good for the player who made the move (parent)
+                parent_player = node.parent.state.current_player
+                if parent_player == Player.PLAYER1:
+                    # If P1 made the move, positive result (P1 win) is good
+                    node.value += result
+                else:
+                    # If P2 made the move, negative result (P2 win) is good
+                    node.value -= result
             else:
-                node.value -= result
+                # Root node just accumulates raw result for stats
+                node.value += result
 
             node = node.parent
 
