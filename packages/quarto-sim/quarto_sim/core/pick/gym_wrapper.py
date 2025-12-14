@@ -1,7 +1,8 @@
 import gymnasium
 from gymnasium import spaces
 import numpy as np
-from env import PickEnv
+
+from .env import PickEnv
 
 
 class PickEnvGym(gymnasium.Env):

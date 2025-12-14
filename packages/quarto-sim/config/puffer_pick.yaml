@@ -8,7 +8,7 @@ checkpoint_dir: models/puffer_pick
 log_dir: data/puffer_pick
 
 env:
-  xml_path: src/sim/scenes/pick_scene.xml
+  xml_path: packages/quarto-sim/quarto_sim/core/scenes/pick_scene.xml
   control_dt: 0.0167  # ~60Hz control
   action_scale: 0.04
   max_episode_steps: 150

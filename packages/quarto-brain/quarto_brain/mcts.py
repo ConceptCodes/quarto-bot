@@ -63,6 +63,7 @@ class QuartoMCTS:
         self.time_limit = time_limit  # seconds
 
     def search(self, root_state: GameState) -> int:
+        root_player = root_state.current_player
         root = MCTSNode(state=root_state.model_copy(deep=True))
 
         start_time = time.time()
@@ -71,8 +72,8 @@ class QuartoMCTS:
                 break
 
             node = self._select(root)
-            reward = self._simulate(node.state)
-            self._backpropagate(node, reward)
+            winner = self._simulate(node.state)
+            self._backpropagate(node, winner, root_player)
 
         if not root.children:
             # Should not happen unless no moves available
@@ -96,13 +97,8 @@ class QuartoMCTS:
         node.children.append(child_node)
         return child_node
 
-    def _simulate(self, state: GameState) -> float:
+    def _simulate(self, state: GameState) -> Optional[Player]:
         current_state = state.model_copy(deep=True)
-        # We need to track who initiated the simulation to determine reward perspective
-        # But MCTS values are typically for the node's player?
-        # Actually, standard MCTS:
-        # If State S is P1's turn -> Child C is P2's turn (or P1's same turn phase).
-        # We need to simulate until end.
 
         while current_state.game_status == GameStatus.ONGOING:
             legal = self._get_legal_actions_sim(current_state)
@@ -111,45 +107,22 @@ class QuartoMCTS:
             action = random.choice(legal)
             self._apply_action(current_state, action)
 
-        # Reward: +1 if WE won, -1 if opponent won?
-        # Typically MCTS nodes store value for the player who Just moved to get there?
-        # Or always from Root player perspective?
-        # Let's use Root player perspective.
-
-        # Who is the "Root" player?
-        # We don't track it here explicitly, but backprop handles alternating turns if standard game.
-        # But Quarto has 2-step turns.
-        # Let's just return result relative to Player 1 for now, and handle logic in backprop?
-        # Simpler: Return dictionary of {Player: Score}
-
         if current_state.game_status == GameStatus.DRAW:
-            return 0.0
-        elif current_state.game_status == GameStatus.FINISHED:
-            # Winner is current_state.winner
-            # We return score for the player who's turn it was at the NODE?
-            return (
-                1.0 if current_state.winner == Player.PLAYER1 else -1.0
-            )  # This is naive
+            return None
+        if current_state.game_status == GameStatus.FINISHED:
+            return current_state.winner
+        return None
 
-        return 0.0
-
-    def _backpropagate(self, node: MCTSNode, result: float):
-        # result is +1.0 for Player 1 win, -1.0 for Player 2 win, 0.0 for Draw
+    def _backpropagate(self, node: MCTSNode, winner: Optional[Player], root_player: Player):
+        # Propagate +1 if root_player wins, -1 if root_player loses, 0 for draw/None.
         while node is not None:
             node.visits += 1
-
-            if node.parent is not None:
-                # Determine if this outcome was good for the player who made the move (parent)
-                parent_player = node.parent.state.current_player
-                if parent_player == Player.PLAYER1:
-                    # If P1 made the move, positive result (P1 win) is good
-                    node.value += result
-                else:
-                    # If P2 made the move, negative result (P2 win) is good
-                    node.value -= result
+            if winner is None:
+                pass  # draw contributes 0
+            elif winner == root_player:
+                node.value += 1.0
             else:
-                # Root node just accumulates raw result for stats
-                node.value += result
+                node.value -= 1.0
 
             node = node.parent
 
